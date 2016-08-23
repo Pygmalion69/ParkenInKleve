@@ -3,12 +3,13 @@ package de.nitri.parkeninkleve;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -20,12 +21,14 @@ import java.util.Locale;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ParkingListFragment extends Fragment {
+public class ParkingListFragment extends Fragment implements AdapterView.OnItemClickListener{
 
     private Context mContext;
     private DatabaseHelper mDatabaseHelper;
     private List<ParkingModel> mParkings = new ArrayList<>();
     private ParkingAdapter adapter;
+    private Callback mCallback;
+    private ParkingModel mSelectedParking;
 
     public ParkingListFragment() {
     }
@@ -40,7 +43,12 @@ public class ParkingListFragment extends Fragment {
 
         adapter = new ParkingAdapter(mContext, R.layout.parking_list_item, mParkings);
 
+        if (mCallback.getLastLocation() != null) {
+            updateDistances(mCallback.getLastLocation());
+        }
+
         lvParkings.setAdapter(adapter);
+        lvParkings.setOnItemClickListener(this);
 
         return rootView;
     }
@@ -54,26 +62,37 @@ public class ParkingListFragment extends Fragment {
     protected void updateParkings() {
         mParkings.clear();
         mParkings.addAll(mDatabaseHelper.getParkings());
+        if (mCallback.getLastLocation() != null) {
+            updateDistances(mCallback.getLastLocation());
+        }
         adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        mCallback = (Callback) context;
         mContext = context;
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        mCallback = null;
         mContext = null;
     }
 
-    public void updateDistances(Location mLastLocation) {
+    public void updateDistances(Location lastLocation) {
         for (ParkingModel parking : mParkings) {
-            parking.setDistance((float) distance(mLastLocation.getLatitude(), mLastLocation.getLongitude(), parking.getLat(), parking.getLon()));
+            parking.setDistance((float) distance(lastLocation.getLatitude(), lastLocation.getLongitude(), parking.getLat(), parking.getLon()));
         }
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        ParkingModel selectedParking = mParkings.get(i);
+        mCallback.showParkingDialog(selectedParking);
     }
 
     private class ParkingAdapter extends ArrayAdapter<ParkingModel> {
@@ -121,9 +140,9 @@ public class ParkingListFragment extends Fragment {
                 tvFree.setTextColor(ContextCompat.getColor(context, R.color.red));
             tvFree.setText(free);
             tvTotal.setText("(" + parking.getGesamt() + ")");
-            tvDistance.setText(Float.toString(parking.getDistance()) + " km");
-
-
+            // Log.d("DISTANCE", Float.toString(parking.getDistance()));
+            if (parking.getDistance() > 0)
+                tvDistance.setText( String.format(Locale.ROOT, "%.1f km", parking.getDistance()));
             return v;
         }
     }
@@ -149,4 +168,10 @@ public class ParkingListFragment extends Fragment {
     private double rad2deg(double rad) {
         return (rad * 180.0 / Math.PI);
     }
+
+    interface Callback {
+        Location getLastLocation();
+        void showParkingDialog(ParkingModel parking);
+    }
+
 }

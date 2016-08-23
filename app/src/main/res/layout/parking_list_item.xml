@@ -10,8 +10,7 @@
         android:id="@+id/textViewParking"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.6"
-        android:text="New Text" />
+        android:layout_weight="0.6" />
 
 
     <LinearLayout
@@ -23,15 +22,13 @@
         <TextView
             android:id="@+id/textViewFree"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="000" />
+            android:layout_height="wrap_content" />
 
         <TextView
-            android:layout_marginLeft="8dp"
             android:id="@+id/textViewTotal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="000" />
+            android:layout_marginLeft="8dp" />
 
     </LinearLayout>
 
@@ -39,6 +36,5 @@
         android:id="@+id/textViewDistance"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="0.2"
-        android:text="New Text" />
+        android:layout_weight="0.2" />
 </LinearLayout>

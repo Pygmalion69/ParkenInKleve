@@ -79,6 +79,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             row.put(STATUS, parking.getStatus());
             row.put(TOTAL, parking.getGesamt());
             row.put(FREE, parking.getFrei());
+            //TODO:
+            long dateTime = parking.getStand().getTime();
             row.put(STATUS_DATE_TIME, parking.getStand().getTime());
             row.put(LAT, parking.getLat());
             row.put(LON, parking.getLon());
@@ -99,9 +101,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             parking.setStatus(cursor.getString(cursor.getColumnIndex(STATUS)));
             parking.setGesamt(cursor.getInt(cursor.getColumnIndex(TOTAL)));
             parking.setFrei(cursor.getInt(cursor.getColumnIndex(FREE)));
-            parking.setStand(new Date(cursor.getInt(cursor.getColumnIndex(STATUS_DATE_TIME))));
+            //TODO:
+            long dateTime = cursor.getLong(cursor.getColumnIndex(STATUS_DATE_TIME));
+            parking.setStand(new Date(cursor.getLong(cursor.getColumnIndex(STATUS_DATE_TIME))));
             parking.setLat(cursor.getDouble(cursor.getColumnIndex(LAT)));
-            parking.setLat(cursor.getDouble(cursor.getColumnIndex(LON)));
+            parking.setLon(cursor.getDouble(cursor.getColumnIndex(LON)));
             parkings.add(parking);
         }
         cursor.close();
