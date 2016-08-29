@@ -70,7 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public synchronized void updateData(List<ParkingModel> parkings) {
+    public synchronized void updateData(long timestamp, List<ParkingModel> parkings) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_NAME, null, null);
         for (ParkingModel parking : parkings) {
@@ -79,9 +79,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             row.put(STATUS, parking.getStatus());
             row.put(TOTAL, parking.getGesamt());
             row.put(FREE, parking.getFrei());
-            //TODO:
-            long dateTime = parking.getStand().getTime();
-            row.put(STATUS_DATE_TIME, parking.getStand().getTime());
+            row.put(STATUS_DATE_TIME, timestamp);
             row.put(LAT, parking.getLat());
             row.put(LON, parking.getLon());
             db.insert(TABLE_NAME, null, row);

@@ -89,20 +89,20 @@ public class GetDataIntentService extends IntentService {
         ApiEndpointInterface apiService =
                 retrofit.create(ApiEndpointInterface.class);
 
-        Call<List<ParkingModel>> call = apiService.getData();
-        call.enqueue(new Callback<List<ParkingModel>>() {
+        Call<PlsResponse> call = apiService.getData();
+        call.enqueue(new Callback<PlsResponse>() {
             @Override
-            public void onResponse(Call<List<ParkingModel>> call, Response<List<ParkingModel>> response) {
+            public void onResponse(Call<PlsResponse> call, Response<PlsResponse> response) {
                 if (response.body() != null) {
                     DatabaseHelper databaseHelper = DatabaseHelper.getInstance(mContext);
-                    databaseHelper.updateData(response.body());
+                    databaseHelper.updateData(response.body().getStand().getTime(), response.body().getDaten());
                     Intent intent = new Intent(DOWNLOAD_READY);
                     sendBroadcast(intent);
                 }
             }
 
             @Override
-            public void onFailure(Call<List<ParkingModel>> call, Throwable t) {
+            public void onFailure(Call<PlsResponse> call, Throwable t) {
                 t.printStackTrace();
             }
         });
@@ -113,7 +113,7 @@ public class GetDataIntentService extends IntentService {
     public interface ApiEndpointInterface {
 
         @GET("parkleitsystem")
-        Call<List<ParkingModel>> getData();
+        Call<PlsResponse> getData();
     }
 
 }
