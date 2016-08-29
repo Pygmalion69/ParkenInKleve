@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements
 
     private static final int PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2;
+    private ViewPager viewPager;
 
 
     @Override
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements
         mParkingCollectionPagerAdapter =
                 new ParkingCollectionPagerAdapter(
                         getSupportFragmentManager());
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(mParkingCollectionPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -266,20 +267,11 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (mParkingCollectionPagerAdapter.getCurrentFragment() instanceof ParkingListFragment) {
-                ParkingListFragment parkingListFragment = (ParkingListFragment) mParkingCollectionPagerAdapter.getCurrentFragment();
-                if (parkingListFragment != null) {
-                    parkingListFragment.updateParkings();
-                }
-            }
-
-            if (mParkingCollectionPagerAdapter.getCurrentFragment() instanceof ParkingMapFragment) {
-                ParkingMapFragment parkingMapFragment = (ParkingMapFragment) mParkingCollectionPagerAdapter.getCurrentFragment();
-                if (parkingMapFragment != null) {
-                    parkingMapFragment.updateParkings();
-                }
-            }
-
+            // instantiateItem simply returns a reference if the fragment already exists
+            ParkingListFragment parkingListFragment = (ParkingListFragment) mParkingCollectionPagerAdapter.instantiateItem(viewPager, 0);
+            if (parkingListFragment != null) parkingListFragment.updateParkings();
+            ParkingMapFragment parkingMapFragment = (ParkingMapFragment) mParkingCollectionPagerAdapter.instantiateItem(viewPager, 1);
+            if (parkingMapFragment != null) parkingMapFragment.updateParkings();
         }
 
     }
@@ -299,9 +291,11 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         public Fragment getItem(int i) {
+            Fragment fragment;
             switch (i) {
                 case 0:
-                    return new ParkingListFragment();
+                    fragment = new ParkingListFragment();
+                    return fragment;
                 case 1:
                     return new ParkingMapFragment();
                 default:
