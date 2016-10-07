@@ -24,7 +24,6 @@ public class PlsResponse {
         return stand;
     }
 
-    public void setStand(Date stand) {
-        this.stand = stand;
-    }
+    public void setStand(Date stand) { this.stand = stand; }
+
 }

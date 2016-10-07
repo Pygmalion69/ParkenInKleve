@@ -279,13 +279,13 @@ public class MainActivity extends AppCompatActivity implements
     // Since this is an object collection, use a FragmentStatePagerAdapter,
 // and NOT a FragmentPagerAdapter.
     public class ParkingCollectionPagerAdapter extends FragmentStatePagerAdapter {
-        public ParkingCollectionPagerAdapter(FragmentManager fm) {
+        ParkingCollectionPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
         private Fragment mCurrentFragment;
 
-        public Fragment getCurrentFragment() {
+        Fragment getCurrentFragment() {
             return mCurrentFragment;
         }
 

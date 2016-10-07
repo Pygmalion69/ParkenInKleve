@@ -38,7 +38,7 @@ public class GetDataIntentService extends IntentService {
 
     // TODO: Rename parameters
     private static final String EXTRA_URL = "de.nitri.parkeninkleve.extra.URL";
-    private static Context mContext;
+    private Context mContext;
 
     public GetDataIntentService() {
         super("GetDataIntentService");
@@ -56,7 +56,6 @@ public class GetDataIntentService extends IntentService {
         Intent intent = new Intent(context, GetDataIntentService.class);
         intent.setAction(ACTION_DOWNLOAD);
         intent.putExtra(EXTRA_URL, url);
-        mContext = context;
         context.startService(intent);
     }
 
@@ -94,7 +93,7 @@ public class GetDataIntentService extends IntentService {
             @Override
             public void onResponse(Call<PlsResponse> call, Response<PlsResponse> response) {
                 if (response.body() != null) {
-                    DatabaseHelper databaseHelper = DatabaseHelper.getInstance(mContext);
+                    DatabaseHelper databaseHelper = DatabaseHelper.getInstance(GetDataIntentService.this);
                     databaseHelper.updateData(response.body().getStand().getTime(), response.body().getDaten());
                     Intent intent = new Intent(DOWNLOAD_READY);
                     sendBroadcast(intent);

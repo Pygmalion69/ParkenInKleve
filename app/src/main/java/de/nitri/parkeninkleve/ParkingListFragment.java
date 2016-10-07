@@ -6,6 +6,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ import java.util.Locale;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ParkingListFragment extends Fragment implements AdapterView.OnItemClickListener{
+public class ParkingListFragment extends Fragment implements AdapterView.OnItemClickListener {
 
     private Context mContext;
     private DatabaseHelper mDatabaseHelper;
@@ -65,6 +66,8 @@ public class ParkingListFragment extends Fragment implements AdapterView.OnItemC
         if (mCallback.getLastLocation() != null) {
             updateDistances(mCallback.getLastLocation());
         }
+        if (mParkings.size() > 0)
+            Log.d("TIMESTAMP", mParkings.get(0).getStand().toString());
         adapter.notifyDataSetChanged();
     }
 
@@ -101,7 +104,7 @@ public class ParkingListFragment extends Fragment implements AdapterView.OnItemC
         private final int resource;
         private final Context context;
 
-        public ParkingAdapter(Context context, int resource, List<ParkingModel> parkings) {
+        ParkingAdapter(Context context, int resource, List<ParkingModel> parkings) {
             super(context, resource, parkings);
             this.parkings = parkings;
             this.resource = resource;
@@ -142,7 +145,7 @@ public class ParkingListFragment extends Fragment implements AdapterView.OnItemC
             tvTotal.setText("(" + parking.getGesamt() + ")");
             // Log.d("DISTANCE", Float.toString(parking.getDistance()));
             if (parking.getDistance() > 0)
-                tvDistance.setText( String.format(Locale.ROOT, "%.1f km", parking.getDistance()));
+                tvDistance.setText(String.format(Locale.ROOT, "%.1f km", parking.getDistance()));
             return v;
         }
     }
@@ -171,6 +174,7 @@ public class ParkingListFragment extends Fragment implements AdapterView.OnItemC
 
     interface Callback {
         Location getLastLocation();
+
         void showParkingDialog(ParkingModel parking);
     }
 
