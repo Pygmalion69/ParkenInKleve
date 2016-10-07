@@ -28,11 +28,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static DatabaseHelper sInstance;
 
     private static final String DATABASE_NAME = "parking.db";
-    protected static final String TABLE_NAME = "data";
+    private static final String TABLE_NAME = "data";
 
     private static final int DATABASE_VERSION = 1;
 
-    public static synchronized DatabaseHelper getInstance(Context context) {
+    static synchronized DatabaseHelper getInstance(Context context) {
 
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
@@ -70,7 +70,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public synchronized void updateData(long timestamp, List<ParkingModel> parkings) {
+    synchronized void updateData(long timestamp, List<ParkingModel> parkings) {
         SQLiteDatabase db = getWritableDatabase();
         db.delete(TABLE_NAME, null, null);
         for (ParkingModel parking : parkings) {
@@ -88,7 +88,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         db.close();
     }
 
-    public synchronized List<ParkingModel> getParkings() {
+    synchronized List<ParkingModel> getParkings() {
         // Do not bind a cursor as we need to update our local data set with distance.
         SQLiteDatabase db = getWritableDatabase();
         List<ParkingModel> parkings = new ArrayList<>();
@@ -99,9 +99,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             parking.setStatus(cursor.getString(cursor.getColumnIndex(STATUS)));
             parking.setGesamt(cursor.getInt(cursor.getColumnIndex(TOTAL)));
             parking.setFrei(cursor.getInt(cursor.getColumnIndex(FREE)));
-            //TODO:
-            long dateTime = cursor.getLong(cursor.getColumnIndex(STATUS_DATE_TIME));
-            parking.setStand(new Date(cursor.getLong(cursor.getColumnIndex(STATUS_DATE_TIME))));
+            parking.setStand(new Date(cursor.getLong(cursor.getColumnIndex(STATUS_DATE_TIME)) * 1000));
             parking.setLat(cursor.getDouble(cursor.getColumnIndex(LAT)));
             parking.setLon(cursor.getDouble(cursor.getColumnIndex(LON)));
             parkings.add(parking);

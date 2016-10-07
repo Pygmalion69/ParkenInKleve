@@ -72,7 +72,7 @@ public class GetDataIntentService extends IntentService {
     }
 
     /**
-     * Handle action Foo in the provided background thread with the provided
+     * Handle action in the provided background thread with the provided
      * parameters.
      */
     private void handleActionDownload(String url) {
@@ -94,7 +94,7 @@ public class GetDataIntentService extends IntentService {
             public void onResponse(Call<PlsResponse> call, Response<PlsResponse> response) {
                 if (response.body() != null) {
                     DatabaseHelper databaseHelper = DatabaseHelper.getInstance(GetDataIntentService.this);
-                    databaseHelper.updateData(response.body().getStand().getTime(), response.body().getDaten());
+                    databaseHelper.updateData(response.body().getStand(), response.body().getDaten());
                     Intent intent = new Intent(DOWNLOAD_READY);
                     sendBroadcast(intent);
                 }

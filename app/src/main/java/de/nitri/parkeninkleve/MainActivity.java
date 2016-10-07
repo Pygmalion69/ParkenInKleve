@@ -240,7 +240,7 @@ public class MainActivity extends AppCompatActivity implements
         } else {
             dateFormat = new SimpleDateFormat("MM/dd/yyyy hh:mm:", Locale.getDefault());
         }
-        dateFormat.setTimeZone(TimeZone.getTimeZone("Germany/Berlin"));
+        //dateFormat.setTimeZone(TimeZone.getTimeZone("Germany/Berlin"));
         String dateTimeString = dateFormat.format(parking.getStand());
         bundle.putString(ParkingDialogFragment.MESSAGE, getString(R.string.free) + ": " + free + "   (" + dateTimeString + ")");
         bundle.putDouble(ParkingDialogFragment.LON, parking.getLon());

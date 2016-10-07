@@ -9,8 +9,16 @@ import java.util.List;
  */
 public class PlsResponse {
 
-    private Date stand;
+    private long stand;
     private List<ParkingModel> daten = new ArrayList<>();
+
+    long getStand() {
+        return stand;
+    }
+
+    public void setStand(long stand) {
+        this.stand = stand;
+    }
 
     public List<ParkingModel> getDaten() {
         return daten;
@@ -20,10 +28,5 @@ public class PlsResponse {
         this.daten = daten;
     }
 
-    public Date getStand() {
-        return stand;
-    }
-
-    public void setStand(Date stand) { this.stand = stand; }
 
 }
