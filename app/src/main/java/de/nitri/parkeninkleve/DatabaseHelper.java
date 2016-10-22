@@ -99,7 +99,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             parking.setStatus(cursor.getString(cursor.getColumnIndex(STATUS)));
             parking.setGesamt(cursor.getInt(cursor.getColumnIndex(TOTAL)));
             parking.setFrei(cursor.getInt(cursor.getColumnIndex(FREE)));
-            parking.setStand(new Date(cursor.getLong(cursor.getColumnIndex(STATUS_DATE_TIME)) * 1000));
+            long epoch = cursor.getLong(cursor.getColumnIndex(STATUS_DATE_TIME)) * 1000;
+            parking.setLat(cursor.getDouble(cursor.getColumnIndex(LAT)));
+            parking.setStand(new Date(epoch));
             parking.setLat(cursor.getDouble(cursor.getColumnIndex(LAT)));
             parking.setLon(cursor.getDouble(cursor.getColumnIndex(LON)));
             parkings.add(parking);
